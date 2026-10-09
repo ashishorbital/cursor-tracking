@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursor Tracking & Dynamic Emotion Engine</title>
+  <meta name="description"
+    content="A visually stunning interactive cartoon character that tracks your cursor with smooth pupil physics and dynamically changes facial expressions based on mouse behavior.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/src/index.css">
+  <link rel="stylesheet" href="/src/components/Character/character.css">
+</head>
+
+<body>
+  <div id="app" class="app-container">
+    <!-- Ambient Background Glows -->
+    <div class="ambient-glow glow-1"></div>
+    <div class="ambient-glow glow-2"></div>
+    <div class="ambient-glow glow-3"></div>
+
+    <!-- Header Navigation / Title -->
+    <header class="app-header">
+
+      <div class="header-actions">
+        <button id="toggle-debug-btn" class="btn btn-secondary" title="Toggle Debug Panel (Hotkey: D)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path
+              d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+          </svg>
+          <span>Debug Mode</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Character Experience Stage -->
+    <main class="stage">
+      <div class="character-wrapper" id="character-wrapper">
+        <!-- Floating Active Emotion Badge -->
+        <div class="emotion-badge-container">
+          <div class="emotion-badge" id="emotion-badge">
+            <span class="emotion-label" id="badge-label">Neutral</span>
+          </div>
+        </div>
+
+        <!-- Character SVG Container -->
+        <div class="character-container" id="character-container">
+          <!-- The SVG will be rendered/controlled by character.js -->
+        </div>
+
+        <!-- Proximity Ripple / Shadow -->
+        <div class="character-shadow" id="character-shadow"></div>
+      </div>
+
+      <!-- Quick Interactive Emotion Palette for Instant Demonstration -->
+      <div class="controls-toolbar">
+        <span class="toolbar-title">Simulate Emotion:</span>
+        <div class="emotion-buttons" id="emotion-buttons">
+          <button class="emo-btn" data-emotion="auto" title="Automatic Engine Mode">Auto</button>
+          <button class="emo-btn" data-emotion="curious" title="Curious">Curious</button>
+          <button class="emo-btn" data-emotion="happy" title="Happy">Happy</button>
+          <button class="emo-btn" data-emotion="excited" title="Excited">Excited</button>
+          <button class="emo-btn" data-emotion="surprised" title="Surprised">Surprised</button>
+          <button class="emo-btn" data-emotion="confused" title="Confused">Confused</button>
+          <button class="emo-btn" data-emotion="nervous" title="Nervous">Nervous</button>
+          <button class="emo-btn" data-emotion="sleepy" title="Sleepy">Sleepy</button>
+          <button class="emo-btn" data-emotion="sad" title="Sad">Sad</button>
+          <button class="emo-btn" data-emotion="dizzy" title="Dizzy">Dizzy</button>
+        </div>
+      </div>
+    </main>
+
+    <footer class="app-footer">
+    </footer>
+
+    <!-- Comprehensive Debug Overlay Panel -->
+    <aside class="debug-panel hidden" id="debug-panel">
+      <div class="debug-header">
+        <h3>Emotion Engine Debugger</h3>
+        <button id="close-debug-btn" class="close-btn">&times;</button>
+      </div>
+
+      <div class="debug-content">
+        <!-- Cursor Metrics Section -->
+        <div class="debug-section">
+          <h4>Cursor Tracking</h4>
+          <div class="debug-grid">
+            <div class="debug-item"><span class="lbl">Pos (X, Y):</span> <span class="val" id="dbg-pos">0, 0</span>
+            </div>
+            <div class="debug-item"><span class="lbl">Speed:</span> <span class="val" id="dbg-speed">0.00 px/ms</span>
+            </div>
+            <div class="debug-item"><span class="lbl">Vel (X, Y):</span> <span class="val" id="dbg-vel">0.0, 0.0</span>
+            </div>
+            <div class="debug-item"><span class="lbl">Distance:</span> <span class="val" id="dbg-dist">0 px</span></div>
+            <div class="debug-item"><span class="lbl">Zone:</span> <span class="val badge-zone"
+                id="dbg-zone">MEDIUM</span></div>
+            <div class="debug-item"><span class="lbl">Idle Time:</span> <span class="val" id="dbg-idle">0s</span></div>
+            <div class="debug-item"><span class="lbl">Dir Change:</span> <span class="val"
+                id="dbg-dirchange">0.00</span></div>
+            <div class="debug-item"><span class="lbl">Approaching:</span> <span class="val"
+                id="dbg-approaching">No</span></div>
+            <div class="debug-item"><span class="lbl">Spin Sweeps:</span> <span class="val" id="dbg-sweep">0.0
+                rad</span></div>
+          </div>
+        </div>
+
+        <!-- Emotion State Section -->
+        <div class="debug-section">
+          <h4>Emotion Engine</h4>
+          <div class="debug-status-row">
+            <div><span class="lbl">Active:</span> <strong id="dbg-current-emo">neutral</strong></div>
+            <div><span class="lbl">Target:</span> <strong id="dbg-target-emo">neutral</strong></div>
+            <div><span class="lbl">Confidence:</span> <span id="dbg-confidence">100%</span></div>
+          </div>
+
+          <!-- Emotion Scores Breakdown Bars -->
+          <div class="emotion-scores-list" id="dbg-scores-list">
+            <!-- Dynamically populated scores -->
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+
+</html>

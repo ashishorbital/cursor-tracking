@@ -1,0 +1,110 @@
+/* Character SVG Container & Styles */
+
+.character-container {
+  width: 280px;
+  height: 280px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.character-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.35));
+}
+
+/* Character Body/Head Transform Root */
+#head-group {
+  transform-origin: 150px 150px;
+  will-change: transform;
+}
+
+/* Eyes & Pupils */
+.eye-sclera {
+  fill: #ffffff;
+  transition: fill 0.3s ease;
+}
+
+.pupil-group {
+  will-change: transform;
+}
+
+.pupil-iris {
+  fill: url(#pupil-gradient);
+}
+
+.pupil-highlight-1 {
+  fill: #ffffff;
+}
+
+.pupil-highlight-2 {
+  fill: rgba(255, 255, 255, 0.7);
+}
+
+/* Eyelids for Blinking & Sleepiness */
+.eyelid-path {
+  fill: url(#head-gradient);
+  will-change: transform, d;
+}
+
+/* Eyebrows */
+.eyebrow {
+  fill: none;
+  stroke: #3b2416;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  will-change: transform, d;
+}
+
+/* Mouth */
+.mouth-path {
+  fill: none;
+  stroke: #3b2416;
+  stroke-width: 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  will-change: transform, d, fill;
+}
+
+.mouth-path.filled {
+  fill: #3b2416;
+}
+
+/* Blush Elements */
+.blush-left, .blush-right {
+  fill: #f43f5e;
+  opacity: 0.35;
+  filter: blur(4px);
+  will-change: opacity, transform;
+}
+
+/* Character Shadow */
+.character-shadow {
+  width: 180px;
+  height: 24px;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.15) 0%, transparent 70%);
+  border-radius: 50%;
+  margin-top: -10px;
+  z-index: 1;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  will-change: transform, opacity;
+}
+
+/* Responsive Character Size */
+@media (max-width: 768px) {
+  .character-container {
+    width: 220px;
+    height: 220px;
+  }
+  .character-shadow {
+    width: 140px;
+    height: 20px;
+  }
+}
